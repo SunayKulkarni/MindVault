@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { UserModel, ContentModel } from "./db";
 import bcrypt from "bcrypt";
-import { JWT_SECRET } from "./config";
+import { JWT_SECRET,MONGODB_URI } from "./config";
 import { userMiddleware, AuthenticatedRequest } from "./auth";
 import { LinkModel } from "./db";
 
@@ -168,7 +168,7 @@ app.get("/api/v1/brain/:sharableLink", async (req, res) => {
 
 function main() {
   mongoose.connect(
-    "mongodb+srv://sunaykulkarni17:sunay@cluster0.j1tnbjn.mongodb.net/SecondBrain",
+    MONGODB_URI!
   );
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
