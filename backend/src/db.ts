@@ -11,17 +11,18 @@ const ContentSchema = new Schema({
   type: { type: String },
   title: { type: String },
   tags: { type: Schema.Types.ObjectId, ref: "Tag" },
-  contentId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 
-const LinkScehma = new Schema({
-  hash : {type: String, unique: true},
-  userId : {type: Schema.Types.ObjectId, ref: "User",required: true, unique: true},
+const LinkSchema = new Schema({
+  hash: { type: String, unique: true, required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  contentId: { type: Schema.Types.ObjectId, ref: "Content", required: true }
 })
 
 const UserModel = model("User", UserSchema);
 const ContentModel = model("Content", ContentSchema);
-const LinkModel = model("Link", LinkScehma);
+const LinkModel = model("Link", LinkSchema);
 
 export { UserModel, ContentModel , LinkModel};

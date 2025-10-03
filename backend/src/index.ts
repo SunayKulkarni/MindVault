@@ -74,7 +74,7 @@ app.post("/api/v1/content",userMiddleware, async (req: AuthenticatedRequest, res
       link,
       type,
       title,
-      contentId: req.userId,
+      userId: req.userId,
     });
 
     res.json({
@@ -87,8 +87,8 @@ app.get("/api/v1/content", userMiddleware,async (req: AuthenticatedRequest, res)
     const userId = req.userId;
 
     const content = await ContentModel.find({
-      contentId: userId,
-    }).populate("contentId");
+      userId: userId,
+    }).populate("userId");
 
     res.json({
       content,
@@ -96,14 +96,11 @@ app.get("/api/v1/content", userMiddleware,async (req: AuthenticatedRequest, res)
   },
 );
 
-app.delete(
-  "/api/v1/content",
-  userMiddleware,
-  async (req: AuthenticatedRequest, res) => {
+app.delete("/api/v1/content", userMiddleware, async (req: AuthenticatedRequest, res) => {
     const contentIdtoDelete = req.body.contentId;
     await ContentModel.deleteMany({
       _id: contentIdtoDelete,
-      contentId: req.userId,
+      userId: req.userId,
     });
 
     res.json({
@@ -112,20 +109,34 @@ app.delete(
   },
 );
 
+
+
 app.post("/api/v1/brain/share", userMiddleware, async (req:AuthenticatedRequest, res) => {
   const share  = req.body.share;
+  const hash = Math.random().toString(36).substring(2,15) + Math.random().toString(36).substring(2,15);
+
   if(share){
     await LinkModel.create({
        userId : req.userId,
-       hash : Math.random().toString(36).substring(2,15) + Math.random().toString(36).substring(2,15),
+       hash : hash
+    })
+
+   console.log(hash);
+    res.json({
+      message : hash
     })
   }
   else{
     await LinkModel.deleteOne({
       userId : req.userId,
     })
+
+    res.json({
+      message : "Link Deleted"
+    })
   }
 })
+
 
 
 app.get("/api/v1/brain/:sharableLink", async (req, res) => {
@@ -142,29 +153,42 @@ app.get("/api/v1/brain/:sharableLink", async (req, res) => {
       return;
    }
    else{
-      const content = await ContentModel.find({
-        userId : link.userId
-      })
+     try {
+       const content = await ContentModel.find({
+          userId : link.userId
+       })
 
-      const user = await UserModel.findOne({
-         userId : link.userId
-      })
- 
-      // ideally this should not happen
-      if(!user){
-        res.json({
-          message : "User not found"
-        })
-      }
+       const user = await UserModel.findOne({
+         _id: link.userId
+       })
 
-      res.json({
-        username : user?.username,
-        content : content
-      })
+       if (!user) {
+         return res.status(404).json({
+           message: "User not found"
+         })
+       }
+
+       if (!content || content.length === 0) {
+         return res.status(404).json({
+           message: "Content not found"
+         })
+       }
+
+       res.json({
+         username: user.username,
+         content: content
+       })
+     } catch (error) {
+       console.error("Error fetching shared content:", error);
+       res.status(500).json({
+         message: "Error retrieving shared content"
+       })
+     }
      
    } 
 
-})
+
+  })
 
 function main() {
   mongoose.connect(
