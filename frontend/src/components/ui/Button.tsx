@@ -1,6 +1,5 @@
 type ButtonVariant = 'primary' | 'secondary';
 
-
 export interface ButtonProps{
     variant: ButtonVariant;
     size: 'sm' | 'md' | 'lg';
@@ -14,7 +13,7 @@ const variantStyles = {
     primary: 'bg-blue-500 text-white',
     secondary: 'bg-gray-500 text-white',
 }
-const defaultStyles = "px-4 py-2 rounded ";
+const defaultStyles = "px-4 py-2 rounded flex items-center gap-2 ";
 
 const sizeStyles = {
     sm: 'text-sm',
@@ -23,8 +22,8 @@ const sizeStyles = {
 }
 
 export const Button = (props : ButtonProps)=>{
-    return <button className={`${variantStyles[props.variant]} ${defaultStyles} ${sizeStyles[props.size]}`} onClick={props.onClick}>
-         {props.text} 
+    return <button className={`  ${variantStyles[props.variant]} ${defaultStyles} ${sizeStyles[props.size]}`} onClick={props.onClick}>
+        {props.startIcon} {props.text} 
     </button>
 }
 
