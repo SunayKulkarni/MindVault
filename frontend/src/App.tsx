@@ -1,5 +1,8 @@
 import { Button } from "./components/ui/Button";
 import { PlusIcon } from "./icons/plusIcon";
+import { ShareIcon } from "./icons/shareIcon";
+import { Card } from "./components/ui/Card";
+import  { SideBar } from "./components/ui/SideBar";
 function App() {
   return (
     <>
@@ -11,9 +14,11 @@ function App() {
 function ShareButton() {
   return (
     <div>
-      <Button startIcon={PlusIcon} variant="primary" size="sm" text="Share" onClick={() => {}} />
-        <br />
-      <Button variant="secondary" size="lg" text="Share" onClick={() => {}} />
+      <br />
+      <Button startIcon={<PlusIcon />} variant="secondary" size="lg" text="Share" onClick={() => {}} />
+      <Button startIcon={<ShareIcon />} variant="primary" size="lg" text="Share" onClick={() => {}} />
+      <Card />
+      <SideBar />
     </div>
   );
 }
