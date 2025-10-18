@@ -1,7 +1,7 @@
 import { Button } from "./components/ui/Button";
 import { PlusIcon } from "./icons/plusIcon";
 import { ShareIcon } from "./icons/shareIcon";
-import { Card } from "./components/ui/Card";
+import { Card } from "./components/ui/Button"
 import  { SideBar } from "./components/ui/SideBar";
 function App() {
   return (
