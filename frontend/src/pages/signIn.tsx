@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function signin() {
     const username = usernameRef.current?.value.trim();
@@ -24,9 +26,11 @@ export default function SignIn() {
       });
 
       if (response.status === 200) {
-        const jwt = response.data.token;
+        const jwt = response.data.message;
+        console.log("Received JWT:", jwt);
         localStorage.setItem("token", jwt);
-        window.location.href = "/dashboard";
+
+        navigate("/dashboard");
       } else {
         alert("Sign in failed. Please try again.");
       }

@@ -61,7 +61,7 @@ app.post("/api/v1/signin", async (req, res) => {
     },
     JWT_SECRET!,
   );
-  res.json({
+  res.status(200).json({
     message: token,
   });
 });
